@@ -1,13 +1,20 @@
 package com.example.edu.mymultiexternal;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,6 +23,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    final int REQUEST_CODE =100 ;
     int LOAD_IMAGE = 101;
     int IMAGE_CAPTURE = 102;
     InputStream inputStream = null;
@@ -29,6 +38,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fromGalleryButton.setOnClickListener(this);
         Button imageCaptureButton = findViewById(R.id.imageCaptureButton);
         imageCaptureButton.setOnClickListener(this);
+
+        int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+        }
+
+    }
+    @NonNull
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    Log.i("", "Permission has been granted by user");
+                }
+        }
+
     }
 
     @Override
