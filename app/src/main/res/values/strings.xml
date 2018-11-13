@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MyMultiExternal</string>
+    <string name="fromGalleryButton">fromGalleryButton</string>
+</resources>
